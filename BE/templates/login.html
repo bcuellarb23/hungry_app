@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block header %}
+{% endblock %}
+
+{% block content %}
+<body>
+        <div class="login-signup-container">
+            <div class="login-container">
+                <div class = "login-logo">
+			<a href="{{ url_for('index') }}">
+				<img src="{{ img_path }}logo.png" alt = "Hungry Logo" class = "login-logo">
+			</a>
+                </div>
+                <h1>Login to Your Account</h1>
+                <form id="login-form">
+                    <div class="input-section">
+                        <div class="entryarea">
+                            <input type="email" id="email" name="email" required>
+                            <div class="label-line">Email:</div>
+                        </div>
+                    </div>
+                    <div class="input-section">
+                        <div class="entryarea">
+                            <input type="password" id="password" name="password" required>
+                            <div class="label-line">Password:</div>
+                        </div>
+                    </div>
+                    
+                    <button id="loginButton" type="submit">Login</button>
+                </form>
+                <div id="message"></div>
+            </div>
+
+
+        </div>
+	<script src="{{url_for('static', filename='config.js') }}"></script>
+	<script src="{{url_for('static', filename='login.js') }}"></script>
+	{% endblock %}
+	{% block footer %}
+	{% endblock %}
+    </body>

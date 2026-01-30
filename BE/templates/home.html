@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block content %}
+<body>
+    <main>
+        <section class="profile-hub">
+            <div class="profile-pic-container">
+		    <img src="{{ img_path }}profile.jpg" alt="Upload your picture" class="profile-pic">
+                <div class="user-name" id="user-name-link">Guest Name</div>
+            </div>
+            <div class="day-card">
+                <div class="day-header" id="today-date">Day 00/00/00</div>
+                <div class="macro-container">
+                    <div class="macro-row">
+                        <div class="macro-name">Calories</div>
+                        <div class="macro-progress">
+                            <svg class="circle">
+                                <circle class="bar-circle" cx="30" cy="30" r="25"> </circle>
+                                <circle class="calories-circle" id="calories-bar" cx="30" cy="30" r="25"></circle>
+                            </svg>
+                            <div class="progress-percent" id="calories-percent">0%</div>
+                        </div>
+                    </div>
+                    <div class="macro-row">
+                        <div class="macro-name">Proteins</div>
+                        <div class="macro-progress">
+                            <svg class="circle">
+                                <circle class="bar-circle" cx="30" cy="30" r="25"> </circle>
+                                <circle class="protein-circle" cx="30" cy="30" r="25" ></circle>
+                            </svg>
+                            <div class="progress-percent">0%</div>
+                        </div>
+                    </div>
+                    <div class="macro-row">
+                        <div class="macro-name">Carbs</div>
+                        <div class="macro-progress">
+                            <svg class="circle">
+                                <circle class="bar-circle" cx="30" cy="30" r="25"> </circle>
+                                <circle class="carb-circle" cx="30" cy="30" r="25"> </circle>
+                            </svg>
+                            <div class="progress-percent">0%</div>
+                        </div>
+                    </div>
+                    <div class="macro-row">
+                        <div class="macro-name">Fats</div>
+                        <div class="macro-progress">
+                            <svg class="circle">
+                                <circle class="bar-circle" cx="30" cy="30" r="25"> </circle>
+                                <circle class="fat-circle" cx="30" cy="30" r="25"> </circle>
+                            </svg>
+                            <div class="progress-percent">0%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="features">
+                <div class="feature">
+                    <h1>Look for your Trainer</h1>
+                    <p>Type the name of your trainer to search for him/her.</p>
+                    <button id="Trainer-name">Trainer Name</button>
+                </div>
+                <div class="tracker">
+                    <h1>Track Your Food</h1>
+                    <div id="login-form">
+                        <div class="input-section">
+                            <div class="entryarea">
+                                <input type="text" id="foodInput" name="foodInput" required>
+                                <div class="label-line-tracker">Enter a food item...</div>
+                            </div>
+                        </div>
+                    </div>
+                    <button id="searchButton">Search</button>
+                </div>
+            </section>
+            <section class="results">
+                <h2>Select Your Food From the Options Below</h2>
+                <div id="results"></div>
+                
+                <!-- Template for Search Results -->
+                <template id="result-template">
+                    <div class="product-result">
+                        <h4></h4>
+                        <p class="p-cals"></p>
+                        <p class="p-prot"></p>
+                        <p class="p-carbs"></p>
+                        <p class="p-fats"></p>
+                        <div style="margin: 10px 0;">
+                            <label>Serving (g): </label>
+                            <input type="number" class="serving-input" style="width: 60px;">
+                        </div>
+                        <button class="add-food-btn">Add</button>
+                    </div>
+                </template>
+
+            </section>
+    </main>
+    <script src="{{url_for('static', filename='config.js') }}"></script>
+    <script src="{{url_for('static', filename='home.js') }}"></script>
+    {% endblock %}
+</body>

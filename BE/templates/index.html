@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <body>
+        <main>
+            <section class="hero">
+                <h1>Hungry Tracks Your Macros</h1>
+                <p>Easy way to stay healthy and reach your goals for free.</p>
+                <button id="orderNowBtn">Check your food</button>
+            </section>
+            <section class="features">
+                <div class="feature">
+                    <h1>Personalized Tracking</h1>
+                    <p>Monitor your daily intake of calories, proteins, carbs, and fats based on your preferences.</p>
+                    <button id="getStartedBtn">Get Started</button>
+                </div>
+                <div class="tracker">
+                    <h1>Track Your Food</h1>
+                    <div id="login-form">
+                        <div class="input-section">
+                            <div class="entryarea">
+                                <input type="text" id="foodInput" required>
+                                <div class="label-line-tracker">Enter a food item...</div>
+                            </div>
+                        </div>
+                    </div>
+                    <button id="searchButton">Search</button>
+                </div>
+            </section>
+            <section class="results">
+                <h2>Food Nutrition Information</h2>
+                <div id="results"></div>
+
+            </section>
+        </main>
+        
+        {% endblock %}
+
+        <script src="config.js"></script>
+        <script src="index.js"></script>
+    </body>
+</html>
