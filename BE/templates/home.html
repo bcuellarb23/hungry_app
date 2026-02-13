@@ -26,9 +26,9 @@
                         <div class="macro-progress">
                             <svg class="circle">
                                 <circle class="bar-circle" cx="30" cy="30" r="25"> </circle>
-                                <circle class="protein-circle" cx="30" cy="30" r="25" ></circle>
+                                <circle class="protein-circle" id="protein-bar" cx="30" cy="30" r="25" ></circle>
                             </svg>
-                            <div class="progress-percent">0%</div>
+                            <div class="progress-percent" id="protein-percent">0%</div>
                         </div>
                     </div>
                     <div class="macro-row">
@@ -36,9 +36,9 @@
                         <div class="macro-progress">
                             <svg class="circle">
                                 <circle class="bar-circle" cx="30" cy="30" r="25"> </circle>
-                                <circle class="carb-circle" cx="30" cy="30" r="25"> </circle>
+                                <circle class="carb-circle" id="carb-bar" cx="30" cy="30" r="25"> </circle>
                             </svg>
-                            <div class="progress-percent">0%</div>
+                            <div class="progress-percent" id="carb-percent">0%</div>
                         </div>
                     </div>
                     <div class="macro-row">
@@ -46,53 +46,63 @@
                         <div class="macro-progress">
                             <svg class="circle">
                                 <circle class="bar-circle" cx="30" cy="30" r="25"> </circle>
-                                <circle class="fat-circle" cx="30" cy="30" r="25"> </circle>
+                                <circle class="fat-circle" id="fat-bar" cx="30" cy="30" r="25"> </circle>
                             </svg>
-                            <div class="progress-percent">0%</div>
+                            <div class="progress-percent" id="fat-percent">0%</div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
         <section class="features">
-                <div class="feature">
-                    <h1>Look for your Trainer</h1>
-                    <p>Type the name of your trainer to search for him/her.</p>
-                    <button id="Trainer-name">Trainer Name</button>
-                </div>
                 <div class="tracker">
-                    <h1>Track Your Food</h1>
-                    <div id="login-form">
-                        <div class="input-section">
-                            <div class="entryarea">
-                                <input type="text" id="foodInput" name="foodInput" required>
-                                <div class="label-line-tracker">Enter a food item...</div>
-                            </div>
-                        </div>
+			<h1>Add Your Food Here</h1>
+                    <div id="initial-buttons">
+                        <button id="initialSearchButton">Search</button>
+                        <button class="add-manually-btn">Add Manually</button>
                     </div>
-                    <button id="searchButton">Search</button>
+		    
+		    	<!-- Template for Search bar -->
+			<template id="searchbar-template">
+                <!-- Search button first -->
+                <button id="searchButton">Search</button>
+                <div class="input-section">
+                    <div class="entryarea">
+                        <input type="text" id="foodInput" required>
+                        <div class="label-line-tracker">Enter a food item...</div>
+                    </div>
                 </div>
-            </section>
-            <section class="results">
-                <h2>Select Your Food From the Options Below</h2>
-                <div id="results"></div>
-                
-                <!-- Template for Search Results -->
-                <template id="result-template">
-                    <div class="product-result">
-                        <h4></h4>
-                        <p class="p-cals"></p>
-                        <p class="p-prot"></p>
-                        <p class="p-carbs"></p>
-                        <p class="p-fats"></p>
-                        <div style="margin: 10px 0;">
-                            <label>Serving (g): </label>
-                            <input type="number" class="serving-input" style="width: 60px;">
-                        </div>
-                        <button class="add-food-btn">Add</button>
-                    </div>
-                </template>
+				
+		    	<div class="results">
+					<div id="results"></div>
+				</div>
+			</template>
+			
+				<!-- Template for Search Results -->
+				<template id="result-template">
+					<div class="product-result">
+						<h4></h4>
+						<p class="p-cals"></p>
+						<p class="p-prot"></p>
+						<p class="p-carbs"></p>
+						<p class="p-fats"></p>
+						<div class="input-section">
+							<div class="entryarea">
+								<input type="number" class="serving-input" id="serving-size" >
+								<div class="label-line-tracker">Serving (g): </div>
+							</div>
+						</div>
+						<button class="add-food-btn">Add</button>
+					</div>
+				</template>
+			</div>
 
+			<div class="feature">
+			    <h1>Look for your Trainer</h1>
+			    <p>Type the name of your trainer to search for him/her.</p>
+			    <button id="Trainer-name">Trainer Name</button>
+			</div>
+                </div>
             </section>
     </main>
     <script src="{{url_for('static', filename='config.js') }}"></script>

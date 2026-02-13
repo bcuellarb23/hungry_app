@@ -1,12 +1,11 @@
 from flask import Flask, render_template, request, jsonify, session, g, current_app as app
 from flask_cors import CORS
 from datetime import date, timedelta
+from utils import calculate_nutritional_data
 import requests
 import os
 import mysql.connector
 import bcrypt
-
-DB_HOST = os.environ.get('DB_HOST', 'localhost')
 DB_USER = os.environ.get('DB_USER', 'root')
 DB_PASSWORD = os.environ.get('DB_PASSWORD', 'Juan7421.')
 DB_NAME = os.environ.get('DB_NAME', 'food_tracker')
@@ -382,7 +381,7 @@ def get_daily_totals():
             sql_goals = '''SELECT tdee, max_proteins, max_carbs, max_fats
             FROM user_metrics_history
             WHERE user_id = %s
-            ORDER BY date DESC LIMIT 1'''
+            ORDER BY updated_at DESC LIMIT 1'''
             cursor.execute(sql_goals, (user_id,))
             goals = cursor.fetchone()
 
@@ -403,35 +402,15 @@ def get_daily_totals():
             cursor.execute(sql_totals, (user_id, today))
             totals = cursor.fetchone()
 
-            response_data = {
-                'tdee': goals['tdee'],
-                'protein_goal': goals['max_proteins'],
-                'carbs_goal': goals['max_carbs'],
-                'fats_goal': goals['max_fats'],
-                'consumed': {
-                    'calories': float(totals.get('total_calories') or 0),
-                    'proteins': float(totals.get('total_proteins') or 0),
-                    'carbs': float(totals.get('total_carbs') or 0),
-                    'fats': float(totals.get('total_fats') or 0),
-                }
-            }
-
-            # calculate percentages
-            if goals.get('tdee') and goals['tdee'] > 0:
-                response_data['consumed']['calories_percentage'] = (response_data['consumed']['calories'] / goals['tdee']) * 100
-            if goals.get('max_proteins') and goals['max_proteins'] > 0:
-                response_data['consumed']['proteins_percentage'] = (response_data['consumed']['proteins'] / goals['max_proteins']) * 100
-            if goals.get('max_carbs') and goals['max_carbs'] > 0:
-                response_data['consumed']['carbs_percentage'] = (response_data['consumed']['carbs'] / goals['max_carbs']) * 100
-            if goals.get('max_fats') and goals['max_fats'] > 0:
-                response_data['consumed']['fats_percentage'] = (response_data['consumed']['fats'] / goals['max_fats']) * 100
-
-            return jsonify({'status': 'success', 'data': response_data}), 200
-
+            response_data = calculate_nutritional_data(goals, totals)
+            return jsonify({'status': 'success', 'data':response_data}), 200
+            
     except mysql.connector.Error as err:
-        app.logger.error(f"database error fetching daily totals: {err}")
-        return jsonify({'status': 'error', 'message': 'Failed to get daily totals'}), 500
-    
+        app.logger.error(f"Database error: {err}")
+        return jsonify({'status': 'error', 'message': 'Database error'}), 500
+    except Exception as e:
+        app.logger.error(f"Unexpected error: {e}")
+        return jsonify({'status': 'error', 'message': 'Internal server error'}),
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=5000)        

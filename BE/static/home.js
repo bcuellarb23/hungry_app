@@ -116,64 +116,78 @@ document.addEventListener('DOMContentLoaded' , async() => {
         }
     }
     
-    // Event listener for the search button
-    searchButton.addEventListener('click', async () => {
+    async function performSearch() {
+        const foodInput = document.getElementById('foodInput');
+        const resultsDiv = document.getElementById('results');
         const foodItem = foodInput.value;
-        if (foodItem) {
-            try {
-                const response = await fetch(`${API_BASE_URL}/search_food?food_item=${encodeURIComponent(foodItem)}`, {
-                    credentials: 'include'
+
+        if (!foodItem) return;
+
+        try {
+            const response = await fetch(`${API_BASE_URL}/search_food?food_item=${encodeURIComponent(foodItem)}`, {
+                credentials: 'include'
+            });
+            const products = await response.json();
+            
+            resultsDiv.innerHTML = ''; // Clear previous results
+            
+            if (response.ok && products.length > 0) {
+                const template = document.getElementById('result-template');
+                
+                products.forEach(product => {
+                    const clone = template.content.cloneNode(true);
+                    
+                    clone.querySelector('h4').textContent = product.product_name;
+                    clone.querySelector('.p-cals').textContent = `Calories: ${product.calories} kcal`;
+                    clone.querySelector('.p-prot').textContent = `Proteins: ${product.proteins}g`;
+                    clone.querySelector('.p-carbs').textContent = `Carbohydrates: ${product.carbohydrates}g`;
+                    clone.querySelector('.p-fats').textContent = `Fats: ${product.fat}g`;
+                    
+                    const input = clone.getElementById('serving-size');
+                    input.value = product.serving_size || 100;
+
+                    const btn = clone.querySelector('.add-food-btn');
+                    btn.addEventListener('click', async () => {
+                        const servingSize = parseFloat(input.value);
+                        const foodData = {
+                            product_name: product.product_name,
+                            calories: product.calories,
+                            proteins: product.proteins,
+                            carbohydrates: product.carbohydrates,
+                            fat: product.fat,
+                            serving_size: servingSize || 100,
+                        };
+                        await addFoodEntry(foodData);
+                    });
+
+                    resultsDiv.appendChild(clone);
                 });
-                const products = await response.json();
-                
-                resultsDiv.innerHTML = ''; // Clear previous results
-                
-                if (response.ok && products.length > 0) {
-                    const template = document.getElementById('result-template');
-
-                    products.forEach(product => {
-                        // Clone the template
-                        const clone = template.content.cloneNode(true);
-                        
-                        // Fill in the data safely
-                        clone.querySelector('h4').textContent = product.product_name;
-                        clone.querySelector('.p-cals').textContent = `Calories: ${product.calories} kcal`;
-                        clone.querySelector('.p-prot').textContent = `Proteins: ${product.proteins}g`;
-                        clone.querySelector('.p-carbs').textContent = `Carbohydrates: ${product.carbohydrates}g`;
-                        clone.querySelector('.p-fats').textContent = `Fats: ${product.fat}g`;
-
-                        // Setup input
-                        const input = clone.querySelector('.serving-input');
-                        input.value = product.serving_size || 100;
-
-                        // Setup button listener directly (Closure)
-                        const btn = clone.querySelector('.add-food-btn');
-                        btn.addEventListener('click', async () => {
-                            const servingSize = parseFloat(input.value);
-                            const foodData = {
-                                product_name: product.product_name,
-                                calories: product.calories,
-                                proteins: product.proteins,
-                                carbohydrates: product.carbohydrates,
-                                fat: product.fat,
-                                serving_size: servingSize || 100 // Send the serving size to the backend
-                            };
-                            await addFoodEntry(foodData);
-                        });
-
-                        resultsDiv.appendChild(clone);
-                    }); 
-                } else {
-                    resultsDiv.textContent = 'No food items found.';
-                }
-            } catch (error) {
-                console.error('Error fetching food data:', error);
-                resultsDiv.textContent = 'An error occurred while searching.';
+            } else {
+                resultsDiv.textContent = 'No food items found.';
             }
+        } catch (error) {
+            console.error('Error fetching food data:', error);
+            resultsDiv.textContent = 'An error occurred while searching.';
         }
-    });
-    
-    
+    }
+
+    const initialSearchButton = document.getElementById('initialSearchButton');
+    if (initialSearchButton) {
+        initialSearchButton.addEventListener('click', () => {
+            const initialButtons = document.getElementById('initial-buttons');
+            if (initialButtons) initialButtons.style.display = 'none';
+            
+            const template = document.getElementById('searchbar-template');
+            const clone = template.content.cloneNode(true);
+            document.querySelector('.tracker').appendChild(clone);
+            
+            // Attach listener to the NEW search button from the template
+            const newSearchButton = document.getElementById('searchButton');
+            if (newSearchButton) {
+                newSearchButton.addEventListener('click', performSearch);
+            }
+        });
+    }
 
     fetchUserName();
     setDates();
