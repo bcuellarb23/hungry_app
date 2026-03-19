@@ -17,7 +17,7 @@ DB_NAME = os.environ.get('DB_NAME', 'food_tracker')
 
 app = Flask(__name__)
 # Add your computer's IP address to the origins list below (e.g., http://192.168.1.15:5500)
-CORS(app, supports_credentials=True, origins=["http://127.0.0.1:5500", "http://127.0.0.1:5000", "http://192.168.0.139:5500", "http://192.168.0.139:5000", "http://localhost:5500", "http://localhost:5000"])
+CORS(app, supports_credentials=True, origins=[])
 app.secret_key = os.environ.get('SECRET_KEY')
 
 # Session Cookie Configuration
