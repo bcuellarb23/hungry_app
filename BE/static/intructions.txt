@@ -1,0 +1,26 @@
+# Create the environment if ot is not created
+python3 -m venv venv
+
+# Activate it this is the next step to start allways the server
+source venv/bin/activate
+
+# Install Flask if it is not intalled
+pip install flask
+
+# Install pyOpenSSL to support HTTPS 'adhoc' certificates
+pip install pyopenssl
+
+# Install other necessary dependencies for production
+pip install flask-cors mysql-connector-python bcrypt python-dotenv requests gunicorn
+
+# --- PRE-DEPLOYMENT TESTING ---
+# 1. Create tables in Aiven Console using your SQL schema.
+# 1. Download ca.pem from Aiven Console.
+# 2. Local: Place in BE/ folder and set DB_SSL_CA=ca.pem in .env.
+# 3. Set DB_HOST, DB_USER, DB_PASSWORD, and DB_PORT (e.g., 24958) in .env.
+# 4. Run 'python app.py' and test the login/signup flow.
+
+# --- DEPLOYMENT ---
+# 1. git init / git add / git commit
+# 2. push to GitHub
+# 3. On Render: Set Root Directory to 'BE' and upload ca.pem to 'Secret Files'.

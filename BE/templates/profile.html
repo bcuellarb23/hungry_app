@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{%block content %}
+<body>
+<main>
+    <section class="profile-hub">
+        <!-- Profile Header: Image and Name -->
+        <div class="profile-pic-container">
+            <label for="image-upload" style="cursor: pointer;">
+                <img src="{{ img_path }}profile.jpg" alt="Profile Picture" class="profile-pic" id="profile-display">
+                <p style="font-size: 0.8rem; margin-top: 5px;">Click to change</p>
+            </label>
+            <input type="file" id="image-upload" style="display: none;" accept="image/*">
+            <div class="user-name" id="user-name-display">Guest Name</div>
+        </div>
+
+        <!-- View Mode: Displays User Metrics -->
+        <div id="profile-view-section" class="profile-info-container">
+            <h2>Your Statistics</h2>
+            <div class="macro-container" style="text-align: left; padding: 20px;">
+                <p><strong>Age:</strong> <span id="display-age">--</span> years</p>
+                <p><strong>Weight:</strong> <span id="display-weight">--</span> kg</p>
+                <p><strong>Height:</strong> <span id="display-height">--</span></p>
+                <p><strong>Goal:</strong> <span id="display-goal">--</span></p>
+                <p><strong>Activity:</strong> <span id="display-activity">--</span></p>
+            </div>
+            <button id="enable-edit-btn">Edit Profile</button>
+        </div>
+
+        <!-- Edit Mode: Hidden by default -->
+        <div id="profile-edit-section" class="profile-edit-container" style="display: none; width: 100%;">
+            <h2>Modify Data</h2>
+            <form id="edit-profile-form" style="display: flex; flex-direction: column; gap: 15px;">
+                <div class="input-section">
+                    <div class="entryarea">
+                        <input type="text" name="name" id="edit-name" required>
+                        <div class="label-line-manually">Full Name</div>
+                    </div>
+                </div>
+
+                <div class="two-column-row">
+                    <div class="input-section">
+                        <div class="entryarea">
+                            <input type="number" name="age" id="edit-age" required>
+                            <div class="label-line-manually">Age</div>
+                        </div>
+                    </div>
+                    <div class="input-section">
+                        <div class="entryarea">
+                            <input type="number" step="0.1" name="weight" id="edit-weight" required>
+                            <div class="label-line-manually">Weight (Lbs)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-section">
+                    <div class="entryarea split-entry">
+                        <input type="number" name="height_ft" id="edit-height-ft" required>
+                        <div class="unit-text ft-unit">ft</div>
+                        <div class="divider"></div>
+                        <input type="number" name="height_in" id="edit-height-in" required>
+                        <div class="unit-text in-unit">in</div>
+                        <div class="label-line-manually">Height</div>
+                    </div>
+                </div>
+
+                <button type="submit">Save Changes</button>
+                <button type="button" id="cancel-edit-btn" style="background-color: #333; margin-top: 10px;">Cancel</button>
+            </form>
+        </div>
+    </section>
+</main>
+<script src="{{url_for('static', filename='config.js') }}"></script>
+<script src="{{url_for('static', filename='profile.js') }}"></script>
+{% endblock %}
+</body>

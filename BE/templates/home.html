@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block content %}
+<body>
+<main>
+    <section class="profile-hub">
+        <div class="profile-pic-container">
+            <img src="{{ img_path }}profile.jpg" alt="Upload your picture" class="profile-pic">
+            <div class="user-name" id="user-name-link">Guest Name</div>
+        </div>
+        <div class="day-card">
+            <div class="day-header" id="today-date">Day 00/00/00</div>
+            <div class="macro-container">
+                <div class="macro-row">
+                    <div class="macro-name">Calories</div>
+                    <div class="macro-progress">
+                        <svg class="circle">
+                            <circle class="bar-circle" cx="30" cy="30" r="25"> </circle>
+                            <circle class="calories-circle" id="calories-bar" cx="30" cy="30" r="25"></circle>
+                        </svg>
+                        <div class="progress-percent" id="calories-percent">0%</div>
+                    </div>
+                </div>
+                <div class="macro-row">
+                    <div class="macro-name">Proteins</div>
+                    <div class="macro-progress">
+                        <svg class="circle">
+                            <circle class="bar-circle" cx="30" cy="30" r="25"> </circle>
+                            <circle class="protein-circle" id="protein-bar" cx="30" cy="30" r="25" ></circle>
+                        </svg>
+                        <div class="progress-percent" id="protein-percent">0%</div>
+                    </div>
+                </div>
+                <div class="macro-row">
+                    <div class="macro-name">Carbs</div>
+                    <div class="macro-progress">
+                        <svg class="circle">
+                            <circle class="bar-circle" cx="30" cy="30" r="25"> </circle>
+                            <circle class="carb-circle" id="carb-bar" cx="30" cy="30" r="25"> </circle>
+                        </svg>
+                        <div class="progress-percent" id="carb-percent">0%</div>
+                    </div>
+                </div>
+                <div class="macro-row">
+                    <div class="macro-name">Fats</div>
+                    <div class="macro-progress">
+                        <svg class="circle">
+                            <circle class="bar-circle" cx="30" cy="30" r="25"> </circle>
+                            <circle class="fat-circle" id="fat-bar" cx="30" cy="30" r="25"> </circle>
+                        </svg>
+                        <div class="progress-percent" id="fat-percent">0%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="features">
+        <div class="tracker">
+            <h1>Add Your Food Here</h1>
+            <div id="initial-buttons">
+                <button onclick="location.href='add_food'">Add food</button>
+            </div>
+
+        </div>
+
+        <div class="feature">
+            <h1>Look for your Trainer</h1>
+            <p>Type the name of your trainer to search for him/her.</p>
+            <button id="Trainer-name">Trainer Name</button>
+        </div>
+    </section>
+</main>
+<script src="{{url_for('static', filename='config.js') }}"></script>
+<script src="{{url_for('static', filename='home.js') }}"></script>
+{% endblock %}
+</body>

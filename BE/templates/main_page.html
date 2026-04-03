@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main Page</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="mp-container">
+        <div class="header-section">
+            <div class="mp-user-profile">
+                <img src="profile-pic.png" alt="Upload your picture" class="profile-pic">
+                <div class="user-name">Loading...</div>
+            </div>
+            <div class="week-tracker">
+                <span class="nav-arrow">&lt;</span>
+                <span class="week-text" id="week">Week 00/00/00 to 00/00/00</span>
+                <span class="nav-arrow">&gt;</span>
+            </div>
+        </div>
+        
+        <div class="daily-trackers">
+            <div class="day-card">
+                <div class="day-header" id="yesterday-date">Yesterday 00/00/00</div>
+                <div class="macro-row">
+                    <div class="macro-name">Calories<span id="tdee-value">(0 Kcal)</span></div>
+                    <div class="macro-progress">
+                        <svg class="circle">
+                            <circle class="bar-circle" cx="30" cy="30" r="25"> </circle>
+                            <circle class="calories-circle" cx="30" cy="30" r="25"></circle>
+                        </svg>
+                        <div class="progress-percent">80%</div>
+                    </div>
+                </div>
+                <div class="macro-row">
+                    <div class="macro-name">Proteins</div>
+                    <div class="macro-progress">
+                        <svg class="circle">
+                            <circle class="bar-circle" cx="30" cy="30" r="25"> </circle>
+                            <circle class="protein-circle" cx="30" cy="30" r="25" ></circle>
+                        </svg>
+                        <div class="progress-percent">60%</div>
+                    </div>
+                </div>
+                <div class="macro-row">
+                    <div class="macro-name">Fibers</div>
+                    <div class="macro-progress">
+                        <svg class="circle">
+                            <circle class="bar-circle" cx="30" cy="30" r="25"> </circle>
+                            <circle class="fiber-circle" cx="30" cy="30" r="25"> </circle>
+                        </svg>
+                        <div class="progress-percent">100%</div>
+                    </div>
+                </div>
+                <div class="macro-row">
+                    <div class="macro-name">Fats</div>
+                    <div class="macro-progress">
+                        <svg class="circle">
+                            <circle class="bar-circle" cx="30" cy="30" r="25"> </circle>
+                            <circle class="fat-circle" cx="30" cy="30" r="25"> </circle>
+                        </svg>
+                        <div class="progress-percent">40%</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="day-card">
+                <div class="day-header" id="today-date">Today 00/00/00</div>
+                <div class="macro-row">
+                    <div class="macro-name">Calories</div>
+                    <div class="macro-progress">
+                        <svg class="circle">
+                            <circle class="bar-circle" cx="30" cy="30" r="25"> </circle>
+                            <circle class="calories-circle" cx="30" cy="30" r="25"></circle>
+                        </svg>
+                        <div class="progress-percent">80%</div>
+                    </div>
+                </div>
+                <div class="macro-row">
+                    <div class="macro-name">Proteins</div>
+                    <div class="macro-progress">
+                        <svg class="circle">
+                            <circle class="bar-circle" cx="30" cy="30" r="25"> </circle>
+                            <circle class="protein-circle" cx="30" cy="30" r="25" ></circle>
+                        </svg>
+                        <div class="progress-percent">60%</div>
+                    </div>
+                </div>
+                <div class="macro-row">
+                    <div class="macro-name">Fibers</div>
+                    <div class="macro-progress">
+                        <svg class="circle">
+                            <circle class="bar-circle" cx="30" cy="30" r="25"> </circle>
+                            <circle class="fiber-circle" cx="30" cy="30" r="25"> </circle>
+                        </svg>
+                        <div class="progress-percent">100%</div>
+                    </div>
+                </div>
+                <div class="macro-row">
+                    <div class="macro-name">Fats</div>
+                    <div class="macro-progress">
+                        <svg class="circle">
+                            <circle class="bar-circle" cx="30" cy="30" r="25"> </circle>
+                            <circle class="fat-circle" cx="30" cy="30" r="25"> </circle>
+                        </svg>
+                        <div class="progress-percent">40%</div>
+                    </div>
+                </div>
+            </div>  
+            
+             <div class="day-card">
+                <div class="day-header" id="tomorrow-date">Tomorrow 00/00/00</div>
+                <div class="macro-row">
+                    <div class="macro-name">Calories</div>
+                    <div class="macro-progress">
+                        <svg class="circle">
+                            <circle class="bar-circle" cx="30" cy="30" r="25"> </circle>
+                            <circle class="calories-circle" cx="30" cy="30" r="25"></circle>
+                        </svg>
+                        <div class="progress-percent">70%</div>
+                    </div>
+                </div>
+                <div class="macro-row">
+                    <div class="macro-name">Proteins</div>
+                    <div class="macro-progress">
+                        <svg class="circle">
+                            <circle class="bar-circle" cx="30" cy="30" r="25"> </circle>
+                            <circle class="protein-circle" cx="30" cy="30" r="25" ></circle>
+                        </svg>
+                        <div class="progress-percent">60%</div>
+                    </div>
+                </div>
+                <div class="macro-row">
+                    <div class="macro-name">Fibers</div>
+                    <div class="macro-progress">
+                        <svg class="circle">
+                            <circle class="bar-circle" cx="30" cy="30" r="25"> </circle>
+                            <circle class="fiber-circle" cx="30" cy="30" r="25"> </circle>
+                        </svg>
+                        <div class="progress-percent">100%</div>
+                    </div>
+                </div>
+                <div class="macro-row">
+                    <div class="macro-name">Fats</div>
+                    <div class="macro-progress">
+                        <svg class="circle">
+                            <circle class="bar-circle" cx="30" cy="30" r="25"> </circle>
+                            <circle class="fat-circle" cx="30" cy="30" r="25"> </circle>
+                        </svg>
+                        <div class="progress-percent">40%</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="day-card">
+                <div class="day-header" id="day-after-tomorrow-date">Day after tomorrow 00/00/00</div>
+                <div class="macro-row">
+                    <div class="macro-name">Calories</div>
+                    <div class="macro-progress">
+                        <svg class="circle">
+                            <circle class="bar-circle" cx="30" cy="30" r="25"> </circle>
+                            <circle class="calories-circle" cx="30" cy="30" r="25"></circle>
+                        </svg>
+                        <div class="progress-percent">70%</div>
+                    </div>
+                </div>
+                <div class="macro-row">
+                    <div class="macro-name">Proteins</div>
+                    <div class="macro-progress">
+                        <svg class="circle">
+                            <circle class="bar-circle" cx="30" cy="30" r="25"> </circle>
+                            <circle class="protein-circle" cx="30" cy="30" r="25" ></circle>
+                        </svg>
+                        <div class="progress-percent">60%</div>
+                    </div>
+                </div>
+                <div class="macro-row">
+                    <div class="macro-name">Fibers</div>
+                    <div class="macro-progress">
+                        <svg class="circle">
+                            <circle class="bar-circle" cx="30" cy="30" r="25"> </circle>
+                            <circle class="fiber-circle" cx="30" cy="30" r="25"> </circle>
+                        </svg>
+                        <div class="progress-percent">100%</div>
+                    </div>
+                </div>
+                <div class="macro-row">
+                    <div class="macro-name">Fats</div>
+                    <div class="macro-progress">
+                        <svg class="circle">
+                            <circle class="bar-circle" cx="30" cy="30" r="25"> </circle>
+                            <circle class="fat-circle" cx="30" cy="30" r="25"> </circle>
+                        </svg>
+                        <div class="progress-percent">40%</div>
+                    </div>
+                </div>
+            </div>
+        
+        </div>
+    </div>
+    <script src="config.js"></script>
+    <script src="main_page.js"></script>
+</body>
+</html>

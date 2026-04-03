@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block content %}
+<body>
+    <main>
+        <section class="feature-tracker">
+            <div class="tracker">
+                <h1>Look for a food</h1>
+                <div id="login-form">
+                    <div class="input-section">
+                        <div class="entryarea">
+                            <input type="text" id="foodInput" required>
+                            <div class="label-line-tracker">Enter a food item...</div>
+                        </div>
+                    </div>
+                </div>
+                <button id="searchButton">Search</button>
+                <h3 style="margin-top: 15px;">Or</h3>
+                <a id="addManuallyBtn">Add Custom Food Manually</a>
+            </div>
+        </section> 
+        <section class="results">
+            <h2>Food Nutrition Information</h2>
+            <div id="results"></div>
+        </section>
+    </main>
+    <template id="Add-manually">
+        <div class="food-card">
+            <h2>Add Custom Food</h2>
+            <form id="manual-food-form">
+                <div class="input-section">
+                    <div class="entryarea">
+                        <input type="text" name="name" required>
+                        <div class="label-line-manually">Food Name</div>
+                    </div>
+                </div>
+                <div class="two-column-row">
+                    <div class="input-section">
+                        <div class="entryarea">
+                            <input type="number" name="calories" step="0.1" required>
+                            <div class="label-line-manually">Calories</div>
+                        </div>
+                    </div>
+                    <div class="input-section">
+                        <div class="entryarea">
+                            <input type="number" name="proteins" step="0.1" required>
+                            <div class="label-line-manually">Proteins</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="two-column-row">
+                    <div class="input-section">
+                        <div class="entryarea">
+                            <input type="number" name="carbs" step="0.1" required>
+                            <div class="label-line-manually">Carbs</div>
+                        </div>
+                    </div>
+                    <div class="input-section">
+                        <div class="entryarea">
+                            <input type="number" name="fats" step="0.1" required>
+                            <div class="label-line-manually">Fats</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="input-section">
+                    <div class="entryarea">
+                        <input type="number" name="serving_size" value="100" step="0.1" required>
+                        <div class="label-line-manually">Amount Eaten (g)</div>
+                    </div>
+                </div>
+                <button type="submit" class="add-food-btn">Save to Diary</button>
+            </form>
+        </div>
+    </template>
+    <template id="result-template">
+        <div class="food-card">
+            <h2></h2>
+            <p class="p-cals"></p>
+            <p class="p-prot"></p>
+            <p class="p-carbs"></p>
+            <p class="p-fats"></p>
+            <div class="input-group">
+                <label>Serving Size (g):</label>
+                <input type="number" class="serving-size-input" value="100">
+            </div>
+            <button class="add-food-btn">Add to Diary</button>
+        </div>
+    </template>
+
+    <script src="{{url_for('static', filename='config.js') }}"></script>
+    <script src="{{url_for('static', filename='add_food.js') }}"></script>
+</body>
+{% endblock %}
