@@ -2,13 +2,14 @@
 1. Variables and Fonts
    ====================================================*/
 :root {
-    --primary-red: rgb(216, 49, 49);
+    --primary-red: rgb(225, 73, 37);
+    --hl-orange: rgb(225, 225, 0);
     --hover-red: rgb(80, 30, 30);
-    --bg-dark: rgb(20, 20, 20);
+    --bg: rgb(255, 255, 255);
     --bg-container: rgb(71, 71, 71);
     --bg-card: rgb(63, 63, 63);
     --border-gray: rgb(204, 204, 204);
-    --header-bg: rgb(37, 37, 37);
+    --header-bg: rgb(0, 0, 0);
     --text-white: rgb(255, 255, 255);
     --font-main: 'Namdhinggo', sans-serif;
 }
@@ -21,34 +22,75 @@ body {
     font-family: var(--font-main);
 }
 
-h1, h2, h3, h4, p, a, button, input, select {
+h1, h2, h3, h4, p, a, button, input, select, li {
     font-family: var(--font-main);
-    color: var(--text-white);
+    color: var(--header-bg);
 }
 
 h1 {
 	text-align: center;
-    font-weight: 400;
-    font-size: 40px;
+    font-weight: 500;
+    font-size: 7rem;
+    letter-spacing: -6px;
 }
 
 h2 {
 	text-align: center;
     font-weight: 400;
+    font-size: 6rem;
 }
 
 h3 {
     text-align: center;
+    font-size: 5rem;
+    letter-spacing: -4px;
 }
+h4 { 
+    font-size: 4rem;
+    font-weight: 50;
+    letter-spacing: -3px;
+}
+h5 { font-size: 3rem; }
+h6 { font-size: 2rem; }
 
 p {
-    text-align: center;
-    font-size: 20px;
+    text-align: left;
+    font-size: 1rem;
+    opacity: 50%;
+}
+
+ul {
+    list-style-type: none;
+}
+
+li {
+    position: relative;
+    text-align: left;
+    padding-left: 50px;
+    min-height: 80px;
+    display: flex;
+    font-size: 1rem;
+    align-items: center;
+    opacity: 90%;
+
+}
+
+li::before {
+    content: "";
+    position: absolute;
+    left: -20px;
+    top: 50%;
+    width: 60px;
+    height: 60px;
+    transform: translateY(-50%);
+    background-image: var(--item-icon);
+    background-size: contain;
+    background-repeat: no-repeat;
 }
 
 .login-container a, .tracker a {
     text-decoration: none;
-    color: white;
+    color: black;
 }
 
 a { textdecoration: none; }
@@ -65,10 +107,10 @@ a:hover img {
    ====================================================*/
 header {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     padding: 10px 20px;
-    background-color: var(--header-bg);
+    background-color: var(--bg);
     box-shadow: 0 4px 6px rgb(0, 0, 0);
     border-radius: 20px;
     margin: 1rem;
@@ -93,12 +135,11 @@ footer a:hover {
 }
 
 .hero {
-    background-color: var(--bg-container); 
-    box-shadow: 0 4px 6px rgb(0, 0, 0);
-    border-radius: 20px;
-    padding: 2rem;
     text-align: center;
-    margin: 1rem;
+    background-image: var(--bg-image);
+    background-size: 200px;
+    background-position: right bottom 30%;
+    background-repeat: no-repeat;
 }
 
 /* ====================================================
@@ -185,14 +226,14 @@ footer a:hover {
 	display: none;
 }
 
-#manu-toggle:checked ~ .options{
+#menu-toggle:checked ~ .options{
 	display: flex;
 }
 /* Home sections */
 
 .profile-hub {
     display: grid;
-    background-color: var(--bg-container);
+    background-color: white; 
     border-radius: 20px;
     padding: 20px 10%;
     color: white;
@@ -221,6 +262,63 @@ footer a:hover {
     height: auto;
 }
 
+.logo-index {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: var(--header-height, 100vh);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-top: var(--logo-top-padding, 0vh);
+    transition: all 0.6s ease-in-out;
+    border-radius: 20px;
+    z-index: 1;
+}
+
+.logo-index img:not(.scroll-arrow) {
+    width: var(--logo-width, 300px);
+    height: auto;
+    transition: all 0.6s linear;
+}
+
+.scroll-arrow {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 35px;
+    height: auto;
+    transition: opacity 0.3s ease;
+    animation: bounce 2s infinite;
+    z-index: 2;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        /* You MUST keep the X centering here too! */
+        transform: translateX(-50%) translateY(0);
+    }
+    40% {
+        transform: translateX(-50%) translateY(-15px);
+    }
+    60% {
+        transform: translateX(-50%) translateY(-7px);
+    }
+}
+
+.logo-index.scrolled {
+    top: 5px;
+    background-color: rgba(255, 255, 255);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+}
+
+.main-index {
+    padding-top: 100vh;
+    position: relative;
+}
 
 .account {
     display: flex;
@@ -240,9 +338,6 @@ footer a:hover {
     background-color: #333;
     color: white;
     cursor: pointer;
-    border-radius: 10px;
-    width: 120px;
-    font-size: large;
 }
 
 #loginBtn:hover, #signupBtn:hover, #homeBtn:hover {
@@ -298,21 +393,21 @@ footer a:hover {
 button {
     padding: 1rem;
     border: none;
-    background-color: rgb(145, 45, 45); /* button color */
+    background-color: var(--primary-red); /* button color */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
     color: white;
     border-radius: 10px;
     cursor: pointer;
-    font-size: 1.1rem;
+    font-size: 2rem;
     font-weight: bold;
     width: 100%;
-    max-width: 350px;
+    max-width: 150px;
     transition: background-color 0.3s ease;
     font-family: 'Namdhinggo', sans-serif;
-    font-size: x-large;
 }
 button:hover {
-    background-color: rgb(80, 30, 30); /* Darker red on hover */
+    background-color: var(--hl-orange); /* Darker red on hover */
+    color: black;
 }
 
 .input-section {
@@ -443,7 +538,7 @@ input:valid ~ .unit-text {
 .label-line{
     position: absolute;
     font-size: 1.2rem;
-    color: white;
+    color: black;
     padding: 0 5px;
     margin: 0;
     transition: 0.2s ease;
@@ -481,7 +576,7 @@ select:focus ~ .label-line, select:valid ~ .label-line,
 input:focus ~ .label-line-manually, input:valid ~ .label-line-manually {
     color: var(--primary-red);
     border: var(--primary-red);
-    background-color: var(--bg-container);
+    background-color: white; 
     transform: translate(0, -50px) scale(0.88);
     z-index: 11;
     font-family: var(--font-main); 
@@ -622,10 +717,8 @@ circle {
     max-width: 450px;
     margin: 1rem; 
     padding: 2rem;
-    background-color: #474747;
     box-shadow: 0 4px 6px rgb(0, 0, 0);
     border-radius: 20px;
-    color: white;
 }
 
 
@@ -648,8 +741,6 @@ circle {
     max-width: 600px;
     margin: 50px auto;
     padding: 5%;
-    background-color: #474747;
-    box-shadow: 0 4px 6px rgb(0, 0, 0);
     border-radius: 20px;
     color: white;
 }
@@ -677,7 +768,7 @@ circle {
 }
 
 option {
-	background-color: var(--bg-container);
+	background-color: white;
 	color: white;
 	font-family: var(--font-main);
 }

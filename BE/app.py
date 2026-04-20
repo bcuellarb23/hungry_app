@@ -1,41 +1,43 @@
-from flask import Flask, render_template, request, jsonify, session, g, current_app as app
-from flask_cors import CORS
+import os
+import bcrypt
+import requests
+import mysql.connector
 from datetime import date, timedelta
+from flask import Flask, render_template, request, jsonify, session, g
+from flask_cors import CORS
 from utils import calculate_nutritional_data
 from dotenv import load_dotenv
-import requests
-import os
-import mysql.connector
-import bcrypt
 
 load_dotenv()
 
-DB_HOST = os.environ.get('DB_HOST', 'localhost')
-DB_USER = os.environ.get('DB_USER', 'root')
-DB_PASSWORD = os.environ.get('DB_PASSWORD')
-DB_NAME = os.environ.get('DB_NAME', 'food_tracker')
-DB_SSL_CA = os.environ.get('DB_SSL_CA') # Path to Aiven CA cert
+# Configuration
+app = Flask(__name__)
+app.secret_key = os.environ.get('SECRET_KEY') # Cors configuration to allow cookies to be sent in cross-origin requests, necessary for session management between frontend and backend on different ports during development
+
+# Environment Detection
+IS_RENDER = os.environ.get('RENDER') == 'true'
+DB_CONFIG = {
+    'host': os.environ.get('DB_HOST', 'localhost'),
+    'user': os.environ.get('DB_USER', 'root'),
+    'password': os.environ.get('DB_PASSWORD'),
+    'database': os.environ.get('DB_NAME', 'food_tracker'),
+    'ssl_ca': os.environ.get('DB_SSL_CA') # Path to Aiven CA cert
+}
 
 # New API Configuration
 NEW_API_URL = os.environ.get('NEW_API_URL')
 NEW_API_KEY = os.environ.get('NEW_API_KEY')
 
-app = Flask(__name__)
-# Computer's IP address to the origins list below to allow CORS requests from the frontend running on that IP
-ALLOWED_ORIGINS = os.environ.get('ALLOWED_ORIGINS', '*').split(',')
-CORS(app, supports_credentials=True, origins=ALLOWED_ORIGINS)
-app.secret_key = os.environ.get('SECRET_KEY') # Cors configuration to allow cookies to be sent in cross-origin requests, necessary for session management between frontend and backend on different ports during development
+# Middleware and security 
+origins = os.environ.get('ALLOWED_ORIGINS', '').split(',')
+CORS(app, supports_credentials=True, origins=origins)
 
-# Security: Fail loudly if SECRET_KEY is missing in production
-app.secret_key = os.environ.get('SECRET_KEY')
-if not app.secret_key and not app.debug:
-    raise ValueError("No SECRET_KEY set for Flask application")
-
-# Session Cookie Configuration
-app.config['SESSION_COOKIE_SAMESITE'] = 'Lax' # Necessary for cookies to work in modern browsers on localhost
-app.config['SESSION_COOKIE_SECURE'] = True    # Set to True because we are using HTTPS
-app.config['SESSION_COOKIE_HTTPONLY'] = True  # Prevents JavaScript from reading the cookie (Security)
-app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=7) # Keeps the session open for 7 days
+app.config.update(
+    SESSION_COOKIE_SAMESITE='Lax', # Necessary for cookies to work in modern browsers on localhost
+    SESSION_COOKIE_SECURE=True,    # Set to True because we are using HTTPS
+    SESSION_COOKIE_HTTPONLY=True,  # Prevents JavaScript from reading the cookie (Security)
+    PERMANENT_SESSION_LIFETIME=timedelta(minutes=15) # Keeps the session open for 15 minutes
+)
 
 # Routes definition
 @app.route('/')
@@ -73,18 +75,8 @@ def inject_paths():
 def get_db():
     if 'db' not in g:
         try:
-            config = {
-                'host': DB_HOST,
-                'user': DB_USER,
-                'password': DB_PASSWORD,
-                'database': DB_NAME,
-                'port': int(os.environ.get('DB_PORT', 3306))
-            }
-            if DB_SSL_CA:
-                # Ensure the path is absolute or relative to the app root
-                config['ssl_ca'] = DB_SSL_CA
-                
-            g.db = mysql.connector.connect(**config)
+            active_config = {k: v for k, v in DB_CONFIG.items() if v is not None} # Removes and does not check values that are not defined
+            g.db = mysql.connector.connect(**active_config)
         except mysql.connector.Error as err:
             app.logger.error(f"Failed to connect to Database: {err}")
             return jsonify({"status": "error", "message": "Database connection failed"}), 500
@@ -92,7 +84,7 @@ def get_db():
 @app.teardown_appcontext
 def close_db(e=None):
     db = g.pop('db', None)
-    if db is not None:
+    if db:
         db.close()
 
 
@@ -485,8 +477,10 @@ def get_daily_totals():
         return jsonify({'status': 'error', 'message': 'Internal server error'})
 
 if __name__ == "__main__":
-    # We use ssl_context='adhoc' to support HTTPS locally.
-    # This is required because SESSION_COOKIE_SECURE is set to True.
-    # Note: Use 'python app.py' to run this, NOT 'flask run'.
-    print("\n --- Starting server on https://localhost:5000 --- \n")
-    app.run(host='127.0.0.1', port=5000, debug=True, ssl_context='adhoc')
+    if IS_RENDER:
+        port = int(os.environ.get('PORT', 5000))
+        app.run(host='0.0.0.0', port=port)
+    else:
+        # Local Dev
+        print("\n --- Dev MODE on: https://localhost:5000 --- \n")
+        app.run(host='0.0.0.0', port=5000, debug=True, ssl_context='adhoc')

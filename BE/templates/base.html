@@ -8,14 +8,14 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Namdhinggo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
+    <link rel="icon" type="image/x-icon" href="{{ img_path }}favicon.ico"> 
 </head>
 
 {% block header %}
 <header>
 	<div class="logo">
 		<a href="{{ url_for('index') }}">
-			<img src="{{ img_path }}logo.png" alt="Hungry Logo">
+			<img src="{{ img_path }}logo.svg" alt="Hungry Logo">
 		</a>
 	</div>
 	<nav class="dropdown-menu">
@@ -30,7 +30,10 @@
 </header>
 {% endblock %}
 
-{% block content %}{% endblock %}
+{% block content %}
+<body>
+</body>
+{% endblock %}
 
 {% block footer  %}
 <footer>
