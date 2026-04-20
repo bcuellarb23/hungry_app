@@ -73,6 +73,11 @@ def inject_paths():
 # Data base request
 @app.before_request
 def get_db():
+    # Only establish a DB connection for API routes to save resources.
+    # This prevents connecting to the DB just to serve CSS, JS, or HTML templates.
+    if not request.path.startswith('/api'):
+        return
+
     if 'db' not in g:
         try:
             active_config = {k: v for k, v in DB_CONFIG.items() if v is not None} # Removes and does not check values that are not defined
@@ -100,13 +105,12 @@ def login_user():
     
     try:
         db = g.db
-        cursor = db.cursor(dictionary=True) # returns a dictionary instead of a tuple
-        
-        # Fetch the user's ID and password hash from the database
-        sql = "SELECT user_id, password_hash FROM login WHERE email = %s"
-        cursor.execute(sql, (email,))
-        user = cursor.fetchone()
-
+        with db.cursor(dictionary=True) as cursor: # returns a dictionary instead of a tuple
+            # Fetch the user's ID and password hash from the database
+            sql = "SELECT user_id, password_hash FROM login WHERE email = %s"
+            cursor.execute(sql, (email,))
+            user = cursor.fetchone()
+            
         # Check if the user exists and the password is correct
         if user and bcrypt.checkpw(password.encode('utf-8'), user['password_hash'].encode('utf-8')):
             # Login successful. Store the user_id in the session
