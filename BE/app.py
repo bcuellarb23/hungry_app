@@ -22,7 +22,7 @@ DB_CONFIG = {
     'database': os.environ.get('DB_NAME', 'food_tracker'),
     'user': os.environ.get('DB_USER', 'root'),
     'password': os.environ.get('DB_PASSWORD'),
-    'port': int(os.environ.get('DB_PORT'),
+    'port': int(os.environ.get('DB_PORT')),
     'ssl_ca': '/etc/secrets/ca.pem' 
 }
 
