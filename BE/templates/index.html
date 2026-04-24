@@ -19,31 +19,46 @@
 {% endblock %}
 {% block content %}
 <main class="main-index">
-    <section class="hero" style="--bg-image: url('{{ img_path }}orangesbg.svg');">
-        <h4>Track Your Macros</h4>
-        <p>Monitor your daily intake of: </p>
-        <ul>
-            {% for item in food_items %}
-            <li style="--item-icon: url('{{ img_path }}{{ item.icon_name }}.svg');">
-                {{ item.label }}
-            </li>
-            {% endfor %}
-
-            <li style="--item-icon: url('{{ img_path }}calories.svg');">Calories</li>
-            <li style="--item-icon: url('{{ img_path }}proteins.svg');">Proteins</li>
-            <li style="--item-icon: url('{{ img_path }}carbs.svg');">Carbs</li>
-            <li style="--item-icon: url('{{ img_path }}fats.svg');">Fats</li> 
-        </ul>
-
+    <section class="hero" style="--bg-image: url('{{ img_path }}background.svg');">
+        <h2>Your nutrition app</h2>
+        <h2 class="orange-h2">Know every macro</h2>
+        <h2>Own every meal</h2>
+        <p>Zest turns food tracking into a satisfyingly daily ritual so your food always works towark your goals. </p>
+        
         <button onclick="location.href='login'" id="loginNowBtn">Login</button>
     </section>
     <section class="features">
         <div class="feature">
-            <h4>Connect With a Trainer</h4>
-            <button id="getStartedBtn">Coming soon...</button>
+            <p class="orange-p"> WHAT YOU TRACK</p>
+            <h1>Beyond the data, there is clarity</h1>
+            <p>Four essential pillars, perfectly balanced, so you can stop guessing and start living.</p>
+            <div class="four-essential">
+                <div class="calories-description description-box">
+                    <img src=" {{ img_path }}calories-description.svg" alt="calories">
+                    <p class="p-bold">Calories</p>
+                    <p>Your energy currency. Know exactly how much fuel you're taking in versus burning.</p>
+                </div>
+                <div class="proteins-description description-box">
+                    <img src=" {{ img_path }}proteins-description.svg" alt="proteins">
+                    <p class="p-bold">Proteins</p>
+                    <p>The building block of muscle. Track it daily to hit your recovery and growth targets.</p>
+                </div> 
+                <div class="carbs-description description-box">
+                    <img src=" {{ img_path }}carbs-description.svg" alt="carbs">
+                    <p class="p-bold">Barbohydrates</p>
+                    <p>Your body's preferred energy source. Balance them for sustained performance all day.</p>
+                </div> 
+                <div class="fats-description description-box">
+                    <img src=" {{ img_path }}fats-description.svg" alt="fats">
+                    <p class="p-bold">Fats</p>
+                    <p>Essential for hormones and brain health. Keep fat intake in the right zone, effortlessly.</p>
+                </div>
+            </div>
         </div>
         <div class="tracker">
-            <h4>Macro Quick Search</h4>
+            <p class="orange-p">QUICK SEARCH</p>
+            <h2>Any food, instantly</h2>
+        <p>Type any food and get a full macro breakdown before you even take a bite.</p>
             <div id="login-form">
                 <div class="input-section">
                     <div class="entryarea">
@@ -56,15 +71,16 @@
         </div>
     </section>
     <section class="results">
-        <h5>Food Nutrition Information</h5>
         <div id="results"></div>
         <template id="result-template">
             <div class="food-card">
-                <h2></h2>
-                <p class="p-cals"></p>
-                <p class="p-prot"></p>
-                <p class="p-carbs"></p>
-                <p class="p-fats"></p>         
+                <p class="p-heavy">chicken</p>
+                <div class="food-card-macros">
+                    <p class="p-cals result-box">123</p>
+                    <p class="p-prot result-box">123</p>
+                    <p class="p-carbs result-box">123</p>
+                    <p class="p-fats result-box">123</p>
+                </div>
             </div>
         </template>
 
