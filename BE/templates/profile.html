@@ -5,12 +5,15 @@
     <section class="profile-hub">
         <!-- Profile Header: Image and Name -->
         <div class="profile-pic-container">
-            <label for="image-upload" style="cursor: pointer;">
-                <img src="{{ img_path }}profile.jpg" alt="Profile Picture" class="profile-pic" id="profile-display">
-                <p style="font-size: 0.8rem; margin-top: 5px;">Click to change</p>
-            </label>
+            <img src="{{ user_info.profile_pic if user_info and user_info.profile_pic else url_for('static', filename='images/profile.jpg') }}" 
+                alt="Profile Picture" 
+                class="profile-pic" 
+                id="profile-display"
+                onclick="document.getElementById('image-upload').click()"
+                style="cursor: pointer;">
+            <p style="font-size: 0.8rem; margin-top: 5px;">Click to change</p>
             <input type="file" id="image-upload" style="display: none;" accept="image/*">
-            <div class="user-name" id="user-name-display">Guest Name</div>
+            <h1 class="user-name" id="user-name-display">Guest Name</h1>
         </div>
 
         <!-- View Mode: Displays User Metrics -->
@@ -18,7 +21,7 @@
             <h2>Your Statistics</h2>
             <div class="macro-container" style="text-align: left; padding: 20px;">
                 <p><strong>Age:</strong> <span id="display-age">--</span> years</p>
-                <p><strong>Weight:</strong> <span id="display-weight">--</span> kg</p>
+                <p><strong>Weight:</strong> <span id="display-weight">--</span> lbs</p>
                 <p><strong>Height:</strong> <span id="display-height">--</span></p>
                 <p><strong>Goal:</strong> <span id="display-goal">--</span></p>
                 <p><strong>Activity:</strong> <span id="display-activity">--</span></p>

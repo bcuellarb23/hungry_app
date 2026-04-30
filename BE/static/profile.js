@@ -50,19 +50,38 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // 2. Image Modification (Preview)
-    imageUpload.addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if (file) {
+    if (imageUpload) {
+        imageUpload.addEventListener('change', function() {
+            const file = this.files[0];
+            if (!file) return;
+
             const reader = new FileReader();
-            reader.onload = (event) => {
-                profileDisplay.src = event.target.result;
-            };
+            reader.onload = (e) => profileDisplay.src = e.target.result;
             reader.readAsDataURL(file);
+
+            const formData = new FormData();
+            formData.append('profile_pic', file);
+
+            fetch('/api/upload_picture', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        console.log('Upload Successful:', data.image_url);
+                        profileDisplay.src = data.image_url;
+                    } else {
+                        alert('Upload failed: ' + data.message);
+                    }
+                })
+            catch(error => {
+                console.error('Error uploading image:', error);
+                alert('An error occorred during the upload.');
+            });
+        });
+    }
             
-            // Note: To save the image, you would need to fetch() to a POST upload endpoint here
-            console.log("Image selected. Ready to upload to server.");
-        }
-    });
 
     // 3. Toggle View/Edit
     editBtn.addEventListener('click', () => {

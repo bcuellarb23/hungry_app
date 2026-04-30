@@ -1,26 +1,11 @@
 document.addEventListener('DOMContentLoaded' , async() => {
 
-    // Dropdown Menu Logic
-    const profileImg = document.querySelector('.profile-image');
-    const dropdownMenu = document.querySelector('.dropdown-menu');
-
-    if (profileImg && dropdownMenu) {
-        profileImg.addEventListener('click', (e) => {
-            e.stopPropagation();
-            dropdownMenu.classList.toggle('active');
-        });
-
-        document.addEventListener('click', () => {
-            dropdownMenu.classList.remove('active');
-        });
-    }
-
     const userNameDiv = document.querySelector('#user-name-link');
     const foodInput = document.getElementById('foodInput');
     const searchButton = document.getElementById('searchButton');
     const resultsDiv = document.getElementById('results');
-
-    async function fetchUserName() {
+    
+        async function fetchUserName() {
         try {
             const response = await fetch(`${API_BASE_URL}/get_info`, {
                 credentials: 'include'

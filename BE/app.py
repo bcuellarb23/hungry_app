@@ -2,6 +2,9 @@ import os
 import bcrypt
 import requests
 import mysql.connector
+import cloudinary
+import cloudinary.uploader
+from cloudinary.utils import cloudinary_url
 from mysql.connector import pooling
 from datetime import date, timedelta
 from flask import Flask, render_template, request, jsonify, session, g
@@ -27,19 +30,35 @@ DB_CONFIG = {
     'port': DB_PORT
 }
 
-CA_PATH = "/etc/secrets/ca.pem" if IS_RENDER else "ca.pem"
+MYSQL_SOCKET = "/var/lib/mysql.sock"
 
 pool_kwargs = {
-    'pool_name': "hungry_pool",
+    'pool_name': "zest_pool",
     'pool_size': 3,
-    **{k: v for k, v in DB_CONFIG.items() if v is not None}
+    'user': os.environ.get('DB_USER'),
+    'password': os.environ.get('DB_PASSWORD'),
+    'database': os.environ.get('DB_NAME'),
 }
 
-if IS_RENDER or DB_CONFIG['host'] != 'localhost':
-    pool_kwargs['ssl_ca'] = CA_PATH
-    pool_kwargs['ssl_verify_cert'] = True
+if not IS_RENDER and os.path.exists(MYSQL_SOCKET):
+    pool_kwargs['unix_socket'] = MYSQL_SOCKET
 else:
-    pool_kwargs['ssl_disabled'] = True
+    pool_kwargs['host'] = DB_CONFIG['host']
+    pool_kwargs['port'] = DB_CONFIG['port']
+
+is_remote_db = IS_RENDER or (DB_CONFIG['host'] not in ['localhost', '127.0.0.1'])
+
+if is_remote_db:
+    pool_kwargs.update({
+        'ssl_ca': "/etc/secrets/ca.pem" if IS_RENDER else "ca.pem",
+        'ssl_verify_cert': True,
+        'ssl_disabled': False
+    })
+else:
+    pool_kwargs.update({
+        'ssl_disabled': False,
+        'ssl_verify_cert': False
+    })
 
 try:
     db_pool = mysql.connector.pooling.MySQLConnectionPool(**pool_kwargs)
@@ -55,13 +74,21 @@ http_session = requests.Session()
 NEW_API_URL = os.environ.get('NEW_API_URL')
 NEW_API_KEY = os.environ.get('NEW_API_KEY')
 
+# Cloudinary Confiduration
+cloudinary.config(
+    cloud_name = os.environ.get('CLOUDINARY_NAME'),
+    api_key = os.environ.get('CLOUDINARY_API_KEY'),
+    api_secret = os.environ.get('CLOUDINARY_API_SECRET'),
+    secure=True
+)
+
 # Middleware and security 
 origins = os.environ.get('ALLOWED_ORIGINS', '').split(',')
 CORS(app, supports_credentials=True, origins=origins)
 
 app.config.update(
     SESSION_COOKIE_SAMESITE='Lax', # Necessary for cookies to work in modern browsers on localhost
-    SESSION_COOKIE_SECURE=True,    # Set to True because we are using HTTPS
+    SESSION_COOKIE_SECURE=IS_RENDER,    # Set to True because we are using HTTPS
     SESSION_COOKIE_HTTPONLY=True,  # Prevents JavaScript from reading the cookie (Security)
     PERMANENT_SESSION_LIFETIME=timedelta(days=7) # Keeps the session open for 15 minutes
 )
@@ -155,6 +182,31 @@ def login_user():
         app.logger.error(f"Unexpected error has occurred: {e}")
         return jsonify({"status": "error", "message": "An unexpected error occurred"}), 500
 
+@app.route('/api/upload_picture', methods=['POST'])
+def upload_picture():
+    if 'user_id' not in session:
+        return jsonify({"status": "error", "message": "Log into your account first"}), 401
+    if 'profile_pic' not in request.files:
+        return jsonify({"status": "error", "message": "No file uploaded"}), 400
+
+    file_to_upload = request.files['profile_pic']
+
+    if file_to_upload:
+        try: 
+            upload_result = cloudinary.uploader.upload(file_to_upload, folder="profiles")
+            image_url = upload_result.get('secure_url')
+            user_id = session['user_id']
+            db = get_db()
+            with db.cursor() as cursor:
+                    sql = "UPDATE users SET profile_pic = %s WHERE id = %s"
+                    cursor.execute(sql, (image_url, user_id))
+                    db_commit()
+
+            return jsonify({"status": "success", "image_url": image_url}), 200
+            
+        except Exception as e:
+            return jsonify({"status": "error", "message": str(e)}), 500
+
 @app.route('/api/get_info')
 def get_user_info():
     if 'user_id' not in session:
@@ -200,13 +252,19 @@ def get_food_by_name(food_item_name):
     api_url = f"{NEW_API_URL}/foods/search"
     
     params = {
-        'api_key': NEW_API_KEY,
+        'api_key': NEW_API_KEY
+    }
+
+    payload = {
         'query': food_item_name,
-        'pageSize': 10  # Limit results for better performance
+        'pageSize': 16,
+        'dataType': ["Foundation",
+                     "Survey (FNDDS)"
+                     ]
     }
 
     try:
-        response = http_session.get(api_url, params=params, timeout=5)
+        response = http_session.post(api_url, params=params, json=payload, timeout=5)
         response.raise_for_status()  # Raise an error for bad responses
         return response.json()
     except requests.exceptions.RequestException as e:
@@ -421,8 +479,7 @@ def add_food_entry():
 
     try:
         serving_size = float(serving_size_grams)
-        calories_per_100g = float(calories_per_100g)
-        proteins_per_100g = float(proteins_per_100g)
+        calories_per_100g = float(calories_per_100g)  # Limit results for better performance       proteins_per_100g = float(proteins_per_100g)
         carbs_per_100g = float(carbs_per_100g)
         fats_per_100g = float(fats_per_100g)
     except (ValueError, TypeError):
@@ -509,4 +566,4 @@ def get_daily_totals():
 if __name__ == "__main__":
         # Local Dev
         print("\n --- Dev MODE on: https://localhost:5000 --- \n")
-        app.run(host='0.0.0.0', port=5000, debug=True, ssl_context='adhoc')
+        app.run(host='0.0.0.0', port=5000, debug=True)

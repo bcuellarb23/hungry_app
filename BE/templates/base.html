@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ page_name }} - Hungry App</title>
+    <title>{{ page_name }} - Zest App</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style-hungry.css') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,21 +12,21 @@
 </head>
 
 {% block header %}
-<header>
-	<div class="logo-index scrolled" style="--header-height: 8vh; --logo-width: 150px; --logo-top-padding: 0vh;"> 
-		<a href="{{ url_for('index') }}">
-			<img src="{{ img_path }}logo.svg" alt="Hungry Logo" class="logo-image">
-		</a>
-		<nav class="dropdown-menu dropdown-menu-visible">
-		<img src="{{ img_path }}profile.jpg" alt="Menu" class="profile-image">
-		<div class="dropdown-content">
-			<button onclick="location.href='home'" id="homeBtn">Home</button>
-			<button onclick="location.href='login'" id="loginBtn">Login</button>
-            <button onclick="location.href='profile'" id="signupBtn">Profile</button>
-		</div>
-	</nav>
-	</div>
-</header>
+    <header>
+        <div class="logo-index scrolled" style="--header-height: 8vh; --logo-width: 150px; --logo-top-padding: 0vh;"> 
+            <a href="{{ url_for('index') }}">
+                <img src="{{ img_path }}logo.svg" alt="Hungry Logo" class="logo-image">
+            </a>
+            <nav class="dropdown-menu dropdown-menu-visible">
+                <img src="{{ img_path }}profile.jpg" alt="Menu" class="profile-image">
+                <div class="dropdown-content">
+                    <button onclick="location.href='home'" id="homeBtn">Profile</button>
+                    <button onclick="location.href='login'" id="loginBtn">Login</button>
+                    <button onclick="location.href='profile'" id="signupBtn">Settings</button>
+                </div>
+            </nav>
+        </div>
+    </header>
 {% endblock %}
 
 {% block content %}
@@ -41,4 +41,8 @@
                 <a href="#">Privacy Policy</a>
             </nav>
         </footer>
+{% endblock %}a
+<script src="{{ url_for('static', filename='base.js') }}"></script>
+{% block scripts %}
 {% endblock %}
+    

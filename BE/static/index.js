@@ -38,23 +38,20 @@ document.addEventListener('DOMContentLoaded', async() => {
         });
     }
 
-    const dropdown = document.querySelector('.dropdown-menu');
-
-    dropdown.addEventListener('click', function(event) {
-        event.stopPropagation();
-        this.classList.toggle('is-active');
-    });
-
-    document.addEventListener('click', function() {
-        dropdown.classList.remove('is-active');
-    });
-    
     const searchButton = document.getElementById('searchButton');
     const foodInput = document.getElementById('foodInput');
     const resultsDiv = document.getElementById('results');
 
+    //click the button for search
     if (searchButton) {
         searchButton.addEventListener('click', performSearch);
+    }
+
+    // Enter for search
+    if (foodInput) {
+        foodInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') performSearch();
+            });
     }
 
     async function performSearch() {
@@ -62,15 +59,19 @@ document.addEventListener('DOMContentLoaded', async() => {
         const foodItem = foodInput.value;
         if (!foodItem) return;
         
-        resultsDiv.innerHTML = 'Searching...';
-        console.log(`Searching for: ${foodItem} at ${API_BASE_URL}/search_food`);
+        // Lock button to prevent double clicks
+        searchButton.disabled = true;
+        const originalButtonText = searchButton.textContent;
+        searchButton.textContent = '...';
+
+        resultsDiv.innerHTML = '<p>Searching...</p>';
 
         try {
             const response = await fetch(`${API_BASE_URL}/search_food?food_item=${encodeURIComponent(foodItem)}`, {
                 credentials: 'include'
             });
-            const products = await response.json();
 
+            const products = await response.json();
             resultsDiv.innerHTML = ''; // Clear previous results
 
             if (response.ok && products.length > 0) {
@@ -88,11 +89,14 @@ document.addEventListener('DOMContentLoaded', async() => {
                     resultsDiv.appendChild(clone);
                 });
             } else {
-                resultsDiv.textContent = 'No food items found.';
+                resultsDiv.innerHTML = `<p>No food items found for "${foodItem}".</p>`;
             }
         } catch (error) {
             console.error('Error fetching food data:', error);
-            resultsDiv.textContent = 'An error occurred while searching.';
+            resultsDiv.innerHTML = '<p>An error occurred. Please try again.</p>';
+        }finally {
+            searchButton.disabled = false;
+            searchButton.textContent = originalButtonText;
         }
     }
 });
