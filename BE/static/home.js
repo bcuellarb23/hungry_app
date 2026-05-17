@@ -1,9 +1,6 @@
 document.addEventListener('DOMContentLoaded' , async() => {
 
-    const userNameDiv = document.querySelector('#user-name-link');
-    const foodInput = document.getElementById('foodInput');
-    const searchButton = document.getElementById('searchButton');
-    const resultsDiv = document.getElementById('results');
+    const userNameDiv = document.querySelector('.user-name');
     
         async function fetchUserName() {
         try {
@@ -119,34 +116,51 @@ document.addEventListener('DOMContentLoaded' , async() => {
         }
     }
     
-    async function performSearch() {
-        const foodInput = document.getElementById('foodInput');
-        const resultsDiv = document.getElementById('results');
-        const foodItem = foodInput.value;
+    // Search button logic
+    const searchButton = document.getElementById('searchButton');
+    const foodInput = document.getElementById('foodInput');
+    const resultsDiv = document.getElementById('results');
+    
+    // Click the button for search
+    if (searchButton) {
+        searchButton.addEventListener('click', performSearch);
+        foodInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') performSearch();
+            });
+    }
 
+    async function performSearch() {
+        const foodItem = foodInput.value;
         if (!foodItem) return;
+
+        // Lock button to prevent double cclicks
+        searchButton.disbled = true;
+        const originalButtonText = searchButton.textContent;
+        searchButton.textContent = '...';
+
+        resultsDiv.innerHTML = '<p>Searching...</p>';
 
         try {
             const response = await fetch(`${API_BASE_URL}/search_food?food_item=${encodeURIComponent(foodItem)}`, {
                 credentials: 'include'
             });
+
             const products = await response.json();
-            
             resultsDiv.innerHTML = ''; // Clear previous results
-            
+
             if (response.ok && products.length > 0) {
                 const template = document.getElementById('result-template');
-                
+
                 products.forEach(product => {
                     const clone = template.content.cloneNode(true);
-                    
-                    clone.querySelector('h4').textContent = product.product_name;
-                    clone.querySelector('.p-cals').textContent = `Calories: ${product.calories} kcal`;
-                    clone.querySelector('.p-prot').textContent = `Proteins: ${product.proteins}g`;
-                    clone.querySelector('.p-carbs').textContent = `Carbohydrates: ${product.carbohydrates}g`;
-                    clone.querySelector('.p-fats').textContent = `Fats: ${product.fat}g`;
-                    
-                    const input = clone.querySelector('#serving-size');
+
+                    clone.querySelector('.p-name').textContent = product.product_name;
+                    clone.querySelector('.p-cals').innerHTML = `Calories: <br>${product.calories} kcal`;
+                    clone.querySelector('.p-prot').innerHTML = `Proteins: <br>${product.proteins}g`;
+                    clone.querySelector('.p-carbs').innerHTML = `Carbs: <br>${product.carbohydrates}g`;
+                    clone.querySelector('.p-fats').innerHTML = `Fats: <br>${product.fat}g`;
+
+                    const input = clone.querySelector('.serving-size-input');
                     input.value = product.serving_size || 100;
 
                     const btn = clone.querySelector('.add-food-btn');
@@ -166,30 +180,15 @@ document.addEventListener('DOMContentLoaded' , async() => {
                     resultsDiv.appendChild(clone);
                 });
             } else {
-                resultsDiv.textContent = 'No food items found.';
+                resultsDiv.innerHTML = `<p>No food items found for "${foodItem}".</p>`;
             }
         } catch (error) {
             console.error('Error fetching food data:', error);
-            resultsDiv.textContent = 'An error occurred while searching.';
+            resultsDiv.textContent = 'An error occurred while searching. Please try again.';
+        } finally {
+            searchButton.disabled = false;
+            searchButton.textContent = originalButtonText;
         }
-    }
-
-    const initialSearchButton = document.getElementById('initialSearchButton');
-    if (initialSearchButton) {
-        initialSearchButton.addEventListener('click', () => {
-            const initialButtons = document.getElementById('initial-buttons');
-            if (initialButtons) initialButtons.style.display = 'none';
-            
-            const template = document.getElementById('searchbar-template');
-            const clone = template.content.cloneNode(true);
-            document.querySelector('.tracker').appendChild(clone);
-            
-            // Attach listener to the NEW search button from the template
-            const newSearchButton = document.getElementById('searchButton');
-            if (newSearchButton) {
-                newSearchButton.addEventListener('click', performSearch);
-            }
-        });
     }
 
     fetchUserName();

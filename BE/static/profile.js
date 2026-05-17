@@ -75,10 +75,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         alert('Upload failed: ' + data.message);
                     }
                 })
-            catch(error => {
-                console.error('Error uploading image:', error);
-                alert('An error occorred during the upload.');
-            });
         });
     }
             

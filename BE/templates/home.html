@@ -59,13 +59,34 @@
             <div id="login-form">
                 <div class="input-section">
                     <div class="entryarea">
-                        <input type="text" id="foodImput" required>
+                        <input type="text" id="foodInput" required>
                         <div class="label-line-tracker">Enter a food Item...</div>
                     </div>
                 </div>
             </div>
             <button id="searchButton">Search</button>
         </div>
+
+        <section class="results">
+            <div id="results"></div>
+            <template id="result-template">
+                <div class="food-card">
+                    <p class="p-name"></p>
+                    <div class="food-card-macros">
+                        <p class="p-cals result-box">123</p>
+                        <p class="p-prot result-box">123</p>
+                        <p class="p-carbs result-box">123</p>
+                        <p class="p-fats result-box">123</p>
+                    </div>
+                    <div class="input-group">
+                        <label>Serving Size (g):</label>
+                        <input type="number" class="serving-size-input" value="100">
+                    </div>
+                    <button class="add-food-btn">Add to Diary</button>
+                </div>
+            </template>
+        </section>
+
         <div class="feature">
             <h1>Look for your Trainer</h1>
             <p>Type the name of your trainer to search for him/her.</p>
